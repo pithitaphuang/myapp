@@ -72,8 +72,8 @@ ref.on("value", function(snapshot) {
   snapshot.forEach(function (childSnapshot) {
 
             var value = childSnapshot.val();
-            console.log("Subject is : " + value.Subject);
-      valueRe.push(value.Subject);
+            console.log("Subject is : " + value.subject);
+      valueRe.push(value.subject);
 
         });
 
