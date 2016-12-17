@@ -59,7 +59,7 @@ router.route('/getDataNumber')
     .post(function(req, res) {
 
     	var db = admin.database();
-var ref = db.ref("UserData/" + req.body.UID + "/" +req.body.date);
+var ref = db.ref("project/UserData/" + req.body.UID + "/" + "Subject/" +req.body.Subject + "/" + req.body.date);
 
 console.log("Firebase started ~~~~~~~~");
 
@@ -97,7 +97,7 @@ router.route('/getDataDate')
     .post(function(req, res) {
 
     	var db = admin.database();
-var ref = db.ref("UserData/" + req.body.UID+"/date");
+var ref = db.ref("project/UserData/" + req.body.UID + "/" + "Subject/" + req.body.Subject;
 
 console.log("Firebase started ~~~~~~~~");
 
