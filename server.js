@@ -10,6 +10,8 @@ admin.initializeApp({
 
 
 
+
+
 var express    = require('express');        // call express
 var app        = express();                 // define our app using express
 var bodyParser = require('body-parser');
@@ -165,6 +167,99 @@ ref.on("value", function(snapshot) {
 
 
 
-// REGISTER OUR ROUTES -------------------------------
-// all of our routes will be prefixed with /api
+
+
+router.route('/setSubject')
+    .post(function(req, res) {
+
+
+
+var db = admin.database();
+var ref = db.ref("project/UserData");
+var postsRef = ref.child("Subject");
+             postsRef.push({
+             subject: req.body.subject
+             //console.log("Push Successful");
+             });
+
+             res.json({ Success: true});
+           
+
+
+      //console.log(req.body.UID);
+      
+  //res.json({ message: valueRe });
+}, function (errorObject) {
+  console.log("The read failed: " + errorObject.code);
+});
+      
+ 
+
+
+router.route('/setDate')
+    .post(function(req, res) {
+
+
+
+  var db = admin.database();
+var ref = db.ref("project/UserData/" + req.body.UID +  "/Subject/" +req.body.Subject );
+var postsRef = ref.child("/checkDate");
+             postsRef.push({
+             date: req.body.checkDate
+             //console.log("Push Successful");
+             });
+
+             res.json({ Success: true});
+           
+
+
+      //console.log(req.body.UID);
+      
+  //res.json({ message: valueRe });
+}, function (errorObject) {
+  console.log("The read failed: " + errorObject.code);
+});
+
+
+
+
+router.route('/setNumber')
+    .post(function(req, res) {
+
+
+
+  var db = admin.database();
+var ref = db.ref("project/UserData/" + req.body.UID + "/" + "Subject/" +req.body.Subject + "/"  );
+var postsRef = ref.child(req.body.date);
+             postsRef.push({
+             noid: req.body.noid
+             //console.log("Push Successful");
+             });
+
+             res.json({ Success: true});
+           
+
+
+      //console.log(req.body.UID);
+      
+  //res.json({ message: valueRe });
+}, function (errorObject) {
+  console.log("The read failed: " + errorObject.code);
+});      
+
+
+      
+       
+
+                 
+  
+//   console.log("The read failed");
+
+      
+ 
+        
+//     });
+
+
+
 app.use('/api', router);
