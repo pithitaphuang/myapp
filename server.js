@@ -97,7 +97,7 @@ router.route('/getDataDate')
     .post(function(req, res) {
 
     	var db = admin.database();
-var ref = db.ref("project/UserData/" + req.body.UID + "/" + "Subject/" + req.body.Subject;
+var ref = db.ref("project/UserData/" + req.body.UID + "/" + "Subject/" + req.body.Subject);
 
 console.log("Firebase started ~~~~~~~~");
 
