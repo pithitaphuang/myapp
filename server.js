@@ -53,13 +53,49 @@ router.get('/', function(req, res) {
 
 // on routes that end in /bears
 // ----------------------------------------------------
+
+router.route('/getDataSubject')
+   .post(function(req, res) {
+
+      var db = admin.database();
+var ref = db.ref("project/UserData/Subject");
+
+console.log("Firebase started ~~~~~~~~");
+
+
+var valueRe =[];
+
+ref.on("value", function(snapshot) {
+  //console.log("Element : ");
+  var data = snapshot.val();
+
+  snapshot.forEach(function (childSnapshot) {
+
+            var value = childSnapshot.val();
+            console.log("Subject is : " + value.Subject);
+      valueRe.push(value.Subject);
+
+        });
+
+      //console.log(req.body.UID);
+        res.json({ Subject: valueRe});
+  //res.json({ message: valueRe });
+}, function (errorObject) {
+  console.log("The read failed: " + errorObject.code);
+});
+      
+ 
+        
+    });
+
+
 router.route('/getDataNumber')
 
     // create a bear (accessed at POST http://localhost:8080/api/bears)
     .post(function(req, res) {
 
     	var db = admin.database();
-var ref = db.ref("project/UserData/" + req.body.UID + "/" + "Subject/" +req.body.Subject + "/" + req.body.date);
+var ref = db.ref("project/UserData/" + req.body.UID + "/" + "Subject/" +req.body.Subject + "/" + req.body.date );
 
 console.log("Firebase started ~~~~~~~~");
 
@@ -97,20 +133,23 @@ router.route('/getDataDate')
     .post(function(req, res) {
 
     	var db = admin.database();
-var ref = db.ref("project/UserData/" + req.body.UID + "/" + "Subject/" +req.body.Subject );
+var ref = db.ref("project/UserData/" + req.body.UID +  "/Subject/" +req.body.Subject + "/checkDate" );
 
 console.log("Firebase started ~~~~~~~~");
+console.log(req.body.UID);
+console.log(req.body.Subject);
 
 var valueRe = [];
 
 ref.on("value", function(snapshot) {
   console.log("Element : ");
   var data = snapshot.val();
+  console.log("Title is : " + data);
  snapshot.forEach(function (childSnapshot) {
 
             var value = childSnapshot.val();
-            console.log("Title is : " + value.checkdate);
-			valueRe.push(value.checkdate);
+            console.log("Title is : " + value);
+			valueRe.push(value.date);
 
         });
 
