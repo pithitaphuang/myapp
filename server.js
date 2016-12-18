@@ -56,7 +56,7 @@ router.get('/', function(req, res) {
 // on routes that end in /bears
 // ----------------------------------------------------
 
-router.route('/getDataSubject_date')
+router.route('/getDate_subject')
    .post(function(req, res) {
 
       var db = admin.database();
@@ -177,7 +177,7 @@ var postsRef = ref_datesub.child("/checkDate");
 
 
 
-router.route('/setSubject').post(function(req, res) {
+router.route('/setDataSubject').post(function(req, res) {
 
 
 
@@ -270,7 +270,7 @@ ref.on("value", function(snapshot) {
 
 
 
-router.route('/setNumber')
+router.route('/setDataNumber')
     .post(function(req, res) {
 
   var db = admin.database();
