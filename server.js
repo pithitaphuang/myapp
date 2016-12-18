@@ -52,6 +52,7 @@ router.get('/', function(req, res) {
 });
 
 // more routes for our API will happen here
+//log
 
 // on routes that end in /bears
 // ----------------------------------------------------
@@ -159,7 +160,7 @@ var postsRef = ref_datesub.child("/checkDate");
 
              postsRef.push({
               date: req.body.checkDate ,
-             subject: req.body.subject
+              subject: req.body.subject
              //console.log("Push Successful");
              });
 
