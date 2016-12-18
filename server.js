@@ -100,23 +100,25 @@ router.route('/getDataNumber')
 var ref = db.ref("project/UserData/" + req.body.UID + "/" + "Subject/" +req.body.Subject + "/" + req.body.date );
 
 console.log("Firebase started ~~~~~~~~");
+console.log(req.body.UID);
+console.log(req.body.Subject);
+console.log(req.body.date);
 
 
 var valueRe =[];
 
 ref.on("value", function(snapshot) {
-  console.log("Element : ");
+ 
   var data = snapshot.val();
+   console.log("Element : " + data);
 
   snapshot.forEach(function (childSnapshot) {
 
             var value = childSnapshot.val();
             console.log("Title is : " + value.noid);
-			valueRe.push(value.noid);
+			     valueRe.push(value.noid);
 
         });
-
-  		console.log(req.body.UID);
         res.json({ noid: valueRe});
   //res.json({ message: valueRe });
 }, function (errorObject) {
@@ -246,6 +248,35 @@ var postsRef = ref.child(req.body.date);
 }, function (errorObject) {
   console.log("The read failed: " + errorObject.code);
 });      
+
+
+
+
+router.route('/addDataNoid')
+    .post(function(req, res) {
+
+
+
+  var db = admin.database();
+var ref = db.ref("project/UserData/"+req.body.UID+"/Subject/" + req.body.Subject);
+var postsRef = ref.child(req.body.date);
+             postsRef.push({
+                  noid: req.body.noid
+             });
+
+             res.json({ Success: true});
+           
+
+
+      //console.log(req.body.UID);
+      
+  //res.json({ message: valueRe });
+}, function (errorObject) {
+  console.log("The read failed: " + errorObject.code);
+});    
+
+
+
 
 
       
