@@ -56,39 +56,90 @@ router.get('/', function(req, res) {
 // on routes that end in /bears
 // ----------------------------------------------------
 
-router.route('/getDataSubject')
+router.route('/getDataSubject_date')
    .post(function(req, res) {
 
       var db = admin.database();
-var ref = db.ref("project/UserData/Subject");
+
+var ref_datesub = db.ref("project/UserData/" + req.body.UID +  "/checkDate" );
 
 console.log("Firebase started ~~~~~~~~");
 
 
 var valueRe =[];
+var object = {} // empty Object
+var key = 'dataDate_subject';
+object[key] = [];
 
-ref.on("value", function(snapshot) {
+
+ref_datesub.on("value", function(snapshot) {
   //console.log("Element : ");
   var data = snapshot.val();
 
   snapshot.forEach(function (childSnapshot) {
 
             var value = childSnapshot.val();
-            console.log("Subject is : " + value.subject);
-      valueRe.push(value.subject);
+            var data = {
+                  subject:  value.subject,
+                  date: value.date
+              };
+       object[key].push(data);
+   
 
         });
 
       //console.log(req.body.UID);
-        res.json({ Subject: valueRe});
+        res.json( object
+        );
   //res.json({ message: valueRe });
 }, function (errorObject) {
   console.log("The read failed: " + errorObject.code);
 });
-      
+
+
  
         
     });
+
+
+
+///Android ต้อง query DATADATE ก่อน DATANUMBER
+
+//router.route('/getDataDate')
+
+    // create a bear (accessed at POST http://localhost:8080/api/bears)
+//    .post(function(req, res) {
+
+//    	var db = admin.database();
+//var ref_date = db.ref("project/UserData/" + req.body.UID +  "/Subject/" +req.body.Subject + "/checkDate" );
+
+//console.log("Firebase started ~~~~~~~~");
+//console.log(req.body.UID);
+//console.log(req.body.Subject);
+
+//var valueRe = [];
+
+//ref_date.on("value", function(snapshot) {
+ // console.log("Element : ");
+ // var data = snapshot.val();
+ // console.log("Title is : " + data);
+ //snapshot.forEach(function (childSnapshot) {
+
+//            var value = childSnapshot.val();
+  //          console.log("Title is : " + value);
+		//	valueRe.push(value.date);
+
+      //  });
+
+//  		console.log(req.body.UID);
+//        res.json({ checkdate: valueRe});
+//}, function (errorObject) {
+//  console.log("The read failed: " + errorObject.code);
+//});
+        
+        
+        
+//    });
 
 
 router.route('/getDataNumber')
@@ -96,7 +147,7 @@ router.route('/getDataNumber')
     // create a bear (accessed at POST http://localhost:8080/api/bears)
     .post(function(req, res) {
 
-    	var db = admin.database();
+      var db = admin.database();
 var ref = db.ref("project/UserData/" + req.body.UID + "/" + "Subject/" +req.body.Subject + "/" + req.body.date );
 
 console.log("Firebase started ~~~~~~~~");
@@ -116,7 +167,7 @@ ref.on("value", function(snapshot) {
 
             var value = childSnapshot.val();
             console.log("Title is : " + value.noid);
-			     valueRe.push(value.noid);
+           valueRe.push(value.noid);
 
         });
         res.json({ noid: valueRe});
@@ -128,46 +179,6 @@ ref.on("value", function(snapshot) {
  
         
     });
-
-///Android ต้อง query DATADATE ก่อน DATANUMBER
-
-router.route('/getDataDate')
-
-    // create a bear (accessed at POST http://localhost:8080/api/bears)
-    .post(function(req, res) {
-
-    	var db = admin.database();
-var ref = db.ref("project/UserData/" + req.body.UID +  "/Subject/" +req.body.Subject + "/checkDate" );
-
-console.log("Firebase started ~~~~~~~~");
-console.log(req.body.UID);
-console.log(req.body.Subject);
-
-var valueRe = [];
-
-ref.on("value", function(snapshot) {
-  console.log("Element : ");
-  var data = snapshot.val();
-  console.log("Title is : " + data);
- snapshot.forEach(function (childSnapshot) {
-
-            var value = childSnapshot.val();
-            console.log("Title is : " + value);
-			valueRe.push(value.date);
-
-        });
-
-  		console.log(req.body.UID);
-        res.json({ checkdate: valueRe});
-}, function (errorObject) {
-  console.log("The read failed: " + errorObject.code);
-});
-        
-        
-        
-    });
-
-
 
 
 
@@ -201,8 +212,6 @@ var postsRef = ref.child("Subject");
 router.route('/setDate')
     .post(function(req, res) {
 
-
-
   var db = admin.database();
 var ref = db.ref("project/UserData/" + req.body.UID +  "/Subject/" +req.body.Subject );
 var postsRef = ref.child("/checkDate");
@@ -228,8 +237,6 @@ var postsRef = ref.child("/checkDate");
 router.route('/setNumber')
     .post(function(req, res) {
 
-
-
   var db = admin.database();
 var ref = db.ref("project/UserData/" + req.body.UID + "/" + "Subject/" +req.body.Subject + "/"  );
 var postsRef = ref.child(req.body.date);
@@ -254,8 +261,6 @@ var postsRef = ref.child(req.body.date);
 
 router.route('/addDataNoid')
     .post(function(req, res) {
-
-
 
   var db = admin.database();
 var ref = db.ref("project/UserData/"+req.body.UID+"/Subject/" + req.body.Subject);
