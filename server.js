@@ -73,7 +73,7 @@ object[key] = [];
 
 
 ref_datesub.on("value", function(snapshot) {
-  //console.log("Element : ");
+  
   var data = snapshot.val();
 
   snapshot.forEach(function (childSnapshot) {
@@ -83,6 +83,7 @@ ref_datesub.on("value", function(snapshot) {
                   subject:  value.subject,
                   date: value.date
               };
+
        object[key].push(data);
    
 
@@ -103,45 +104,6 @@ ref_datesub.on("value", function(snapshot) {
 
 
 
-///Android ต้อง query DATADATE ก่อน DATANUMBER
-
-//router.route('/getDataDate')
-
-    // create a bear (accessed at POST http://localhost:8080/api/bears)
-//    .post(function(req, res) {
-
-//    	var db = admin.database();
-//var ref_date = db.ref("project/UserData/" + req.body.UID +  "/Subject/" +req.body.Subject + "/checkDate" );
-
-//console.log("Firebase started ~~~~~~~~");
-//console.log(req.body.UID);
-//console.log(req.body.Subject);
-
-//var valueRe = [];
-
-//ref_date.on("value", function(snapshot) {
- // console.log("Element : ");
- // var data = snapshot.val();
- // console.log("Title is : " + data);
- //snapshot.forEach(function (childSnapshot) {
-
-//            var value = childSnapshot.val();
-  //          console.log("Title is : " + value);
-		//	valueRe.push(value.date);
-
-      //  });
-
-//  		console.log(req.body.UID);
-//        res.json({ checkdate: valueRe});
-//}, function (errorObject) {
-//  console.log("The read failed: " + errorObject.code);
-//});
-        
-        
-        
-//    });
-
-
 router.route('/getDataNumber')
 
     // create a bear (accessed at POST http://localhost:8080/api/bears)
@@ -151,26 +113,32 @@ router.route('/getDataNumber')
 var ref = db.ref("project/UserData/" + req.body.UID + "/" + "Subject/" +req.body.Subject + "/" + req.body.date );
 
 console.log("Firebase started ~~~~~~~~");
-console.log(req.body.UID);
-console.log(req.body.Subject);
-console.log(req.body.date);
-
 
 var valueRe =[];
+var object = {} // empty Object
+var key = 'dataNumber';
+object[key] = [];
 
 ref.on("value", function(snapshot) {
  
   var data = snapshot.val();
-   console.log("Element : " + data);
+   
 
   snapshot.forEach(function (childSnapshot) {
 
             var value = childSnapshot.val();
-            console.log("Title is : " + value.noid);
-           valueRe.push(value.noid);
+            var data = {
+                  noid:  value.noid
+                  
+              };
+             object[key].push(data);
+
+            //console.log("Title is : " + value.noid);
+          // valueRe.push(value.noid);
 
         });
-        res.json({ noid: valueRe});
+        res.json( object
+        );
   //res.json({ message: valueRe });
 }, function (errorObject) {
   console.log("The read failed: " + errorObject.code);
@@ -182,8 +150,34 @@ ref.on("value", function(snapshot) {
 
 
 
-router.route('/setSubject')
+router.route('/setDate_Subject')
     .post(function(req, res) {
+
+var db = admin.database();
+var ref_datesub = db.ref("project/UserData/" + req.body.UID );
+var postsRef = ref_datesub.child("/checkDate");
+
+             postsRef.push({
+              date: req.body.checkDate ,
+             subject: req.body.subject
+             //console.log("Push Successful");
+             });
+
+             res.json({ Success: true});
+           
+
+
+      //console.log(req.body.UID);
+      
+  //res.json({ message: valueRe });
+}, function (errorObject) {
+  console.log("The read failed: " + errorObject.code);
+});
+
+
+
+
+router.route('/setSubject').post(function(req, res) {
 
 
 
@@ -206,30 +200,72 @@ var postsRef = ref.child("Subject");
   console.log("The read failed: " + errorObject.code);
 });
       
+
+router.route('/getDataSubject')
+   .post(function(req, res) {
+
+      var db = admin.database();
+var ref = db.ref("project/UserData/Subject");
+var object = {}; // empty Object
+var key = 'dataSubject';
+object[key] = [];
+console.log("Firebase started ~~~~~~~~");
+
+
+var valueRe =[];
+
+ref.on("value", function(snapshot) {
+  //console.log("Element : ");
+  var data = snapshot.val();
+
+  snapshot.forEach(function (childSnapshot) {
+
+            var value = childSnapshot.val();
+            var data = {
+                  Subject:  value.subject
+                  
+              };
+             object[key].push(data);
+
+            //console.log("Subject is : " + value.subject);
+     // valueRe.push(value.subject);
+
+        });
+
+      //console.log(req.body.UID);
+        res.json( object
+        );
+  //res.json({ message: valueRe });
+}, function (errorObject) {
+  console.log("The read failed: " + errorObject.code);
+});
+      
  
+        
+    });
 
 
-router.route('/setDate')
-    .post(function(req, res) {
+//router.route('/setDate')
+  //  .post(function(req, res) {
 
-  var db = admin.database();
-var ref = db.ref("project/UserData/" + req.body.UID +  "/Subject/" +req.body.Subject );
-var postsRef = ref.child("/checkDate");
-             postsRef.push({
-             date: req.body.checkDate
+//  var db = admin.database();
+//var ref = db.ref("project/UserData/" + req.body.UID +  "/Subject/" +req.body.Subject );
+//var postsRef = ref.child("/checkDate");
+ //            postsRef.push({
+   //          date: req.body.checkDate
              //console.log("Push Successful");
-             });
+     //        });
 
-             res.json({ Success: true});
+       //      res.json({ Success: true});
            
 
 
       //console.log(req.body.UID);
       
   //res.json({ message: valueRe });
-}, function (errorObject) {
-  console.log("The read failed: " + errorObject.code);
-});
+//}, function (errorObject) {
+  //console.log("The read failed: " + errorObject.code);
+//});
 
 
 
@@ -257,28 +293,6 @@ var postsRef = ref.child(req.body.date);
 });      
 
 
-
-
-router.route('/addDataNoid')
-    .post(function(req, res) {
-
-  var db = admin.database();
-var ref = db.ref("project/UserData/"+req.body.UID+"/Subject/" + req.body.Subject);
-var postsRef = ref.child(req.body.date);
-             postsRef.push({
-                  noid: req.body.noid
-             });
-
-             res.json({ Success: true});
-           
-
-
-      //console.log(req.body.UID);
-      
-  //res.json({ message: valueRe });
-}, function (errorObject) {
-  console.log("The read failed: " + errorObject.code);
-});    
 
 
 
