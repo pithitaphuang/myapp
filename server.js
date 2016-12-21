@@ -56,7 +56,7 @@ router.get('/', function(req, res) {
 // on routes that end in /bears
 // ----------------------------------------------------
 
-router.route('/getDate_subject')
+router.route('/getDate_Subject')
    .post(function(req, res) {
 
       var db = admin.database();
